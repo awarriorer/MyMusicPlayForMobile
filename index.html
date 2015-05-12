@@ -5,6 +5,7 @@
 	<title>My music play for mobile</title>
 	<!-- 默认宽度，静止双击缩放 -->
 	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+	<link rel="stylesheet" type="text/css" href="style/swiper3.06.min.css">
 	<link rel="stylesheet" type="text/css" href="style/mainStyle.css">
 </head>
 <body>
@@ -16,7 +17,7 @@
 
 	
 	<!-- 上方容器 -->
-	<section class="con_mainUP">
+	<section class="con_mainUP" id="pageA">
 		<!-- 头部显示 -->
 		<header class="conUp_header">
 			<p class="pageA_title">
@@ -44,6 +45,7 @@
 				<li>
 					<span>喜欢</span>
 				</li>
+				
 			</ul>
 
 		</section>
@@ -66,6 +68,7 @@
 				</span>
 				<span>
 					<i class="iconfont">&#xe60d</i>
+					<i class="iconfont hide">&#xe611</i>
 				</span>
 				
 			</div>
@@ -79,9 +82,105 @@
 	<!-- 上方容器 end-->
 
 	
-	<!-- 下方主容器 -->
-	<section clss="con_mainDown">
-		1234 
+	<!-- 下方主容器 DownPage-->
+	<section class="con_mainDown" id="pageB">
+		<!-- 头部显示 -->
+		<header class="conUp_header">
+
+			<span class="returnOnePage iconfont" id="returnPageA">&#xe608;</span>
+			<p class="pageB_songName">
+				李白李白李白李李白李白李
+			</p>
+		</header>
+		<!-- 中间列表容器 -->
+		<section class="con_container">
+			
+			<!-- pageB,三个容器的集合 -->
+			<div class="swiper-container pageBArr">
+				<div class="swiper-wrapper" id="pageBArr">
+
+					<!-- 第一个，歌曲列表页面 -->
+				    <div class="swiper-slide">
+				    	<ul class="songList">
+							<li>
+								<span class="songNumber">01</span>
+								<div class="songListInformation">
+									<p>李白</p>
+									<p>杜甫</p>
+								</div>
+								<div class="thisHeart">
+									<i class="iconfont noFind">&#xe60b;</i>
+									<i class="iconfont Find">&#xe609;</i>
+								</div>
+							</li>
+
+
+						</ul>
+				    </div>
+				    <!-- 第二页，歌曲播放大碟图片 -->
+				    <div class="swiper-slide">2222</div>
+				    <!-- 第三页，歌词显示页面 -->
+				    <div class="swiper-slide">
+				    	<ul class="lyrics_list">
+				    		<li class="active">想听与你有关的声音</li>
+
+				    	</ul>
+				    </div>
+				</div>
+
+			</div>
+
+
+		</section>
+		<!-- 尾部容器 -->
+		<footer class="con_footer">
+			<!-- pageB，播放组件 -->
+			<div  class="paluMode">
+				<!-- 列表播放 -->
+				<i class="iconfont">&#xe601;</i>
+				<!-- 循环播放 -->
+				<i class="iconfont">&#xe600;</i>
+				<!-- 单曲播放 -->
+				<i class="iconfont">&#xe602;</i>
+				<!-- 随机播放 -->
+				<i class="iconfont">&#xe60f;</i>
+			</div>
+
+			<div class="pageB_play">
+				<!-- pre -->
+				<span>
+					<i class="iconfont">&#xe60c;</i>
+				</span>
+				<!-- play/stop -->
+				<span class="playB_playStop">
+					<i class="iconfont">&#xe610;</i>
+					<i class="iconfont">&#xe611;</i>
+				</span>
+				<!-- next -->
+				<span>
+					<i class="iconfont">&#xe60d;</i>
+				</span>
+			</div>
+
+			<div class="nowHeart">
+				<i class="iconfont">&#xe60b;</i>
+				<i class="iconfont red">&#xe609;</i>
+			</div>
+			<!-- pageB,时间轴 -->
+			<div class="pageB_line">
+				<div></div>
+			</div>
+			<p class="songTime">
+				<span class="nowTime">00:00</span>
+				<span class="allTime">00:00</span>
+			</p>
+			<div class="pageB_nowPage" id="pageB_nowPage">
+				<span class="active"></span>
+				<span></span>
+				<span></span>
+			</div>
+		</footer>
+
 	</section>
 	<!-- 下方主容器 end-->
 

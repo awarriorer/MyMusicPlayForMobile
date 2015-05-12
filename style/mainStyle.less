@@ -74,12 +74,19 @@ body{
 // 上方容器
 .con_mainUP{
 	.mian_con;
-	background-image: url(../images/pageBg/a.jpg);
+	background-image: url(../images/pageBg/1.jpg);
 }
 
 // 下方容器
 .con_mainDown{
 	.mian_con;
+	background-image: url(../images/pageBg/1.jpg);
+
+	transform:translate3D(0,100%,0);
+	-webkit-transform:translate3D(0,100%,0);
+
+	transition:all 1s;
+	-webkit-transition:all 1s;
 }
 
 .conUp_header{
@@ -210,5 +217,240 @@ body{
 			background-size: 3rem 3rem;
 		}
 		
+	}
+}
+
+
+
+//第二个页面的样式
+.returnOnePage{
+	width: 4rem;
+	height: 4rem;
+	display: block;
+	float: left;
+	text-align: center;
+	line-height: 4rem;
+	font-size: 1.3rem;
+}
+
+.pageB_songName{
+	width: 100%;
+	height: 100%;
+	padding: 0 4rem;
+	font-size: 0.9rem;
+	text-align: center;
+	line-height: 4rem;
+	color: rgba(255,255,255,0.5);
+}
+.pageB_songName:after{
+	.clear;
+}
+
+.songList{
+	width: 100%;
+	height: 100%;
+	overflow-y:auto; 
+	list-style: none;
+
+	li{
+		height: 3rem;
+		position: relative;
+		border-bottom: 1px solid rgba(255,255,255,0.4);
+	}
+
+	.songNumber{
+		width: 3rem;
+		height: 3rem;
+		position: absolute;
+		left: 0;
+		top: 0;
+		line-height: 3rem;
+		text-align: center;
+		color: rgba(255,255,255,0.4);
+	}
+
+	.thisHeart{
+		width: 3rem;
+		height: 3rem;
+		position: absolute;
+		right: 0;
+		top: 0;
+		text-align: center;
+		line-height: 3rem;
+
+		i{
+			font-size: 1.5rem;
+		}
+
+	}
+	.Find{
+		color: red;
+		.hide;
+	}
+
+	li:last-child{
+		border-bottom: none;
+	}
+}
+
+.songListInformation{
+	width: 100%;
+	height: 100%;
+	padding: 0.1rem 3rem;
+	p{
+		overflow: hidden;
+	}
+	p:first-child{
+		margin-top: 0.3rem;
+		font-size: 0.8rem;
+	}
+	p:last-child{
+		font-size: 0.3rem;
+	}
+}
+
+//第二个页面播放组件的样式
+
+.paluMode{
+	width: 4rem;
+	height: 4rem;
+	position: absolute;
+	left: 0;
+	top: 0;
+	line-height: 4rem;
+	text-align: center;
+
+	i{
+		font-size: 1.8rem;
+		.hide;
+	}
+	i:first-child{
+		display: block;
+	}
+}
+
+.nowHeart{
+	width: 4rem;
+	height: 4rem;
+	position: absolute;
+	right: 0;
+	top:0;
+	text-align: center;
+	line-height: 4rem;
+
+	i{
+		font-size: 1.6rem;
+		display: none;
+	}
+	i:first-child{
+		display: block;
+	}
+	.red{
+		color: #red;
+	}
+
+}
+
+.pageB_play{
+	width: 100%;
+	height: 100%;
+	padding: 0 4rem;
+	text-align: center;
+	line-height: 4rem;
+
+	span{
+		padding: 0 0.2rem;
+	}
+
+	i{
+		font-size: 1.8rem;
+	}
+
+	.playB_playStop{
+		i{
+			font-size: 2rem;
+		}
+		i:nth-child(2){
+			.hide;
+		}
+	}
+
+
+}
+
+.pageB_line{
+	width: 100%;
+	height: 0.2rem;
+	position: absolute;
+	left: 0;
+	top: 0;
+	background-color: rgba(255,255,255,0.3);
+
+	div{
+		width: 20%;
+		height: 100%;
+		background-color: rgba(255,255,255,0.7);
+	}
+}
+
+.songTime{
+	width: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	font-size: 0.5rem;
+	text-align: center;
+
+	.nowTime{
+		float: left;
+	}
+	.allTime{
+		float: right;
+	}
+}
+
+.pageB_nowPage{
+	width: 100%;
+	height: 0.5rem;
+	position: absolute;
+	left: 0;
+	top:0.1rem;
+	text-align: center;
+	line-height: 0.5rem;
+	span{
+		width: 0.5rem;
+		height: 0.5rem;
+		display: inline-block;
+		background-color: rgba(255,255,255,0.3);
+		border-radius: 50%;
+	}
+	.active{
+		background-color: rgba(255,255,255,0.8);
+	}
+}
+
+// 三个页面的集合
+.pageBArr{
+	width: 100%;
+	height: 100%;
+}
+
+
+.lyrics_list{
+	width: 100%;
+	list-style: none;
+	position: absolute;
+	left: 0;
+	top: 50%;
+
+	li{
+		height: 1.5rem;
+		font-size: 0.8rem;
+		text-align: center;
+		line-height: 1.5rem;
+	}
+	.active{
+		font-size: 1rem;
+		color: rgba(255,255,255,0.8);
 	}
 }
