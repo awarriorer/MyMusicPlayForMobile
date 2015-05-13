@@ -27,54 +27,56 @@
 		<!-- 中间列表容器 -->
 		<section class="con_container">
 			<ul class="misicClassList" id="misicClassList">
-				<li class="showNow">
+				<!-- <li class="showNow">
 					<span>中文</span>
 				</li>
 				<li class="playNow">
 					<span>英文</span>
-				</li>
-				<li>
-					<span>安静</span>
-				</li>
-				<li>
-					<span>节奏</span>
-				</li>
-				<li>
-					<span>杨大叔</span>
-				</li>
-				<li>
-					<span>喜欢</span>
-				</li>
+				</li> -->
+
+				
 				
 			</ul>
+
+			<ul class="misicClassList" id="protect">
+				<li id="allSong">
+					<span>全部</span>
+				</li>
+
+				<li id="ILike">
+					<span>喜欢</span>
+				</li>
+			</ul>
+
+			<div class="clear"></div>
 
 		</section>
 		<!-- 尾部容器 -->
 		<footer class="con_footer">
 			<!-- 歌手图片 -->
-			<div class="pageA_singerImg">
+			<div class="pageA_singerImg" id="pageA_SingerImg">
 				<img src="images/singer/cronmyshoider.jpg">
 			</div>
 			<!-- 歌名显示 -->
-			<div class="nowSong_information">
-				<p>许嵩</p>
-				<p>幻听</p>
+			<div class="nowSong_information" id="nowSong_information">
+				<p id="pageA_singerName">许嵩</p>
+				<p id="pageA_songName">幻听</p>
 			</div>
 			<!-- 播放组件 -->
 
 			<div class="pageA_musicElemnt">
-				<span>
+				<span id="pageA_palyStop">
 					<i class="iconfont">&#xe610</i>
+					<i class="iconfont hide">&#xe611</i>
 				</span>
 				<span>
-					<i class="iconfont">&#xe60d</i>
-					<i class="iconfont hide">&#xe611</i>
+					<i class="iconfont" id="PageA_NextSong">&#xe60d</i>
 				</span>
 				
 			</div>
 
 			<!-- 第一页的时间轴 -->
-			<div class="pageTimeLine">
+			<div class="pageTimeLine" id="pageA_timeLine">
 				<div></div>
 			</div>
 		</footer>
@@ -88,7 +90,7 @@
 		<header class="conUp_header">
 
 			<span class="returnOnePage iconfont" id="returnPageA">&#xe608;</span>
-			<p class="pageB_songName">
+			<p class="pageB_songName" id="pageB_songName">
 				李白李白李白李李白李白李
 			</p>
 		</header>
@@ -101,8 +103,8 @@
 
 					<!-- 第一个，歌曲列表页面 -->
 				    <div class="swiper-slide">
-				    	<ul class="songList">
-							<li>
+				    	<ul class="songList" id="songList">
+							<!-- <li>
 								<span class="songNumber">01</span>
 								<div class="songListInformation">
 									<p>李白</p>
@@ -112,7 +114,7 @@
 									<i class="iconfont noFind">&#xe60b;</i>
 									<i class="iconfont Find">&#xe609;</i>
 								</div>
-							</li>
+							</li> -->
 
 
 						</ul>
@@ -121,7 +123,7 @@
 				    <div class="swiper-slide">2222</div>
 				    <!-- 第三页，歌词显示页面 -->
 				    <div class="swiper-slide">
-				    	<ul class="lyrics_list">
+				    	<ul class="lyrics_list" id="lyrics_list">
 				    		<li class="active">想听与你有关的声音</li>
 
 				    	</ul>
@@ -135,7 +137,7 @@
 		<!-- 尾部容器 -->
 		<footer class="con_footer">
 			<!-- pageB，播放组件 -->
-			<div  class="paluMode">
+			<div  class="paluMode" id="playMode">
 				<!-- 列表播放 -->
 				<i class="iconfont">&#xe601;</i>
 				<!-- 循环播放 -->
@@ -149,30 +151,30 @@
 			<div class="pageB_play">
 				<!-- pre -->
 				<span>
-					<i class="iconfont">&#xe60c;</i>
+					<i class="iconfont" id="pageB_preSong">&#xe60c;</i>
 				</span>
 				<!-- play/stop -->
-				<span class="playB_playStop">
+				<span class="playB_playStop" id="pageB_playStop">
 					<i class="iconfont">&#xe610;</i>
 					<i class="iconfont">&#xe611;</i>
 				</span>
 				<!-- next -->
 				<span>
-					<i class="iconfont">&#xe60d;</i>
+					<i class="iconfont" id="pageB_nextSong">&#xe60d;</i>
 				</span>
 			</div>
 
-			<div class="nowHeart">
+			<div class="nowHeart" id="nowHeart">
 				<i class="iconfont">&#xe60b;</i>
 				<i class="iconfont red">&#xe609;</i>
 			</div>
 			<!-- pageB,时间轴 -->
-			<div class="pageB_line">
+			<div class="pageB_line" id="pageB_line">
 				<div></div>
 			</div>
 			<p class="songTime">
-				<span class="nowTime">00:00</span>
-				<span class="allTime">00:00</span>
+				<span class="nowTime" id="nowTime">00:00</span>
+				<span class="allTime" id="allTime">00:00</span>
 			</p>
 			<div class="pageB_nowPage" id="pageB_nowPage">
 				<span class="active"></span>
@@ -183,6 +185,11 @@
 
 	</section>
 	<!-- 下方主容器 end-->
+
+	<!-- audio,元素 -->
+	<audio src="" id="audio">
+		
+	</audio>
 
 	<script type="text/javascript" src="js/zepto.js"></script>
 	<script type="text/javascript" src="js/zeptoTouch.js"></script>

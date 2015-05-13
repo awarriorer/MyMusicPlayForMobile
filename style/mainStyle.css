@@ -176,10 +176,11 @@ body {
   width: 100%;
   height: 100%;
   padding: 0.5rem 6rem 0.7rem 3.8rem;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   overflow: hidden;
 }
 .nowSong_information p:first-child {
+  margin-top: 0.2rem;
   font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.7);
 }
@@ -296,11 +297,11 @@ body {
   overflow: hidden;
 }
 .songListInformation p:first-child {
-  margin-top: 0.3rem;
+  margin-top: 0.4rem;
   font-size: 0.8rem;
 }
 .songListInformation p:last-child {
-  font-size: 0.3rem;
+  font-size: 0.7rem;
 }
 .paluMode {
   width: 4rem;
@@ -373,8 +374,8 @@ body {
   width: 100%;
   position: absolute;
   left: 0;
-  top: 0;
-  font-size: 0.5rem;
+  top: 0.1rem;
+  font-size: 0.7rem;
   text-align: center;
 }
 .songTime .nowTime {
