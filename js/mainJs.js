@@ -3,7 +3,7 @@
 	声明：本项目仅仅用于学习和技术交流，如有商业目的的引用，请通知本项目作者
 	作者：jack大叔
 	项目起始时间：2015年5月9日10:40:36
-	最后更新时间：2015年5月12日9:21:20
+	最后更新时间：2015年5月14日10:09:36
 
 	
 	本文件主要为本项目提供主要的逻辑代码支持，及主程序
@@ -36,10 +36,10 @@
 	function musicMain(){
 		// 播放器组件获取
 		var Audio            = document.getElementById('audio'),//获取播放器
-			$playStop        = $('#pageA_palyStop,#pageB_playStop'),//播放，暂停
+			$playStop        = $('#pageA_palyStop,#pageB_playStop').find('i'),//播放，暂停
 			$preSong         = $("#pageB_preSong"),//上一首
 			$nextSong        = $("#PageA_NextSong,#pageB_nextSong"),//下一首
-			$timeLine        = $('#pageA_timeLine,#pageB_line'),//时间轴
+			$timeLine        = $('#pageA_timeLine,#pageB_line').find('div'),//时间轴
 			$playMode        = $('#playMode'),//播放模式
 			$showNowTime     = $('#nowTime'), //页面当前时间  
 			$showAllTime     = $('#allTime'), //页面当前时间  
@@ -47,13 +47,13 @@
 			$singerName      = $("#pageA_singerName"),//歌手名称
 			$singerImg       = $('#pageA_SingerImg').find('img'),//歌手图片
 			$nowHeart        = $('#nowHeart'),//显示当前是否为红心
-			$allSong         = $('#allSong'),//按钮
+			$allSong         = $('#allSong'),//按钮,全部音乐
+			$Ilike           = $('#ILike'),
 
 			//页面渲染用到的变量
 			$showSongClass   = $('#misicClassList'),//歌曲分类列表容器
 			$showSongCon     = $('#songList'),//歌曲列表容器
-			$lyricsCon       = $('#lyrics_list'),//歌词容器     
-
+			$lyricsCon       = $('#lyrics_list'),//歌词容器
 
 			//页面中用到的变量
 			Data             = requestData(),//获取数据
@@ -62,12 +62,19 @@
 			nowSongIndex     = 0,//当前类表正在播放的index值
 			songTimeArr      = [],//当前歌曲时间数组
 			songLyricsArr    = [],//当前歌曲歌词数组
-			playModeNum      = 0,
+			playModeNum      = 0,//播放模式
+
+			AllsongArr       = [],//所有歌曲的角标，为点击'全部'所用
+			redHeartArr      = [],//红心音乐
 
 			//后台操作中用到的变量
 			nowTime          = 0,//当前歌曲的当前时间
 			AllTime          = 0,//当前歌曲的总时间
 			AllRunFun        = null,//一直在运行的方法
+
+			LyricsVideoH     = $('#Lyricer_video').height(),//歌词可视区域
+			lyricsLiHeight   = $lyricsCon.find('li').height(),     
+
 
 			aa               = '';
 
@@ -77,8 +84,10 @@
 		// 歌曲分类的渲染
 		function songClassListDrawing(){
 			for( var i = 0; i < Data.length; i++){
-				//动态的写入这首歌的编号
+				//动态的写入这首歌的编号，这个属性将成为操作歌曲的索引
 				Data[i].SongNumber = i;
+				// 初始化，全部歌曲的数组，为点击'全部'所用
+				AllsongArr.push(i);
 				//接收类名称
 				songClass[i]       = Data[i].classS;
 			}
@@ -93,22 +102,18 @@
 		}
 		songClassListDrawing();
 
-		//歌曲列表的渲染,接收的是歌曲分类数组的index值
-		function songListDrawing(ClassIndex){
-			var classNumber = ClassIndex,
-				listIndex   = 0;
+		//歌曲列表的渲染,接收的是一个数组，数组中储存了歌曲的角标
+		function songListDrawing(Arr){
+			var nowArr      = Arr;
 			//清空原数据
 			$showSongCon.html('');
 
-			for( var i = 0; i < Data.length; i++ ){
-				if( Data[i].classS == songClass[classNumber] ){
-					listIndex++;
-					var li = '<li><span class="songNumber">'+ doNunmber(listIndex) +'</span>'+
-					         '<div class="songListInformation" thisNumber='+ Data[i].SongNumber +'>'+
-					         '<p>'+ Data[i].Name +'</p><p>'+ Data[i].Singer +'</p></div><div class="thisHeart">'+
-							 '<i class="iconfont noFind">&#xe60b;</i><i class="iconfont Find">&#xe609;</i></div></li>';
-					$showSongCon.append(li);
-				}
+			for( var i = 0; i < nowArr.length; i++ ){
+				var li = '<li><span class="songNumber">'+ doNunmber(i) +'</span>'+
+				         '<div class="songListInformation" thisNumber='+ Data[nowArr[i]].SongNumber +'>'+
+				         '<p>'+ Data[nowArr[i]].Name +'</p><p>'+ Data[nowArr[i]].Singer +'</p></div><div class="thisHeart">'+
+						 '<i class="iconfont noFind">&#xe60b;</i><i class="iconfont Find">&#xe609;</i></div></li>';
+				$showSongCon.append(li);
 			}
 
 			//把数值转化成二位数
@@ -123,21 +128,63 @@
 		//默认显示第一个
 		songListDrawing(0);
 
+		function LyricsDrawing(){
+			$lyricsCon.html('');
+			for( var i in songLyricsArr ){
+				var li = '<li>'+ songLyricsArr[i] +'</li>';
+				$lyricsCon.append(li);
+			}
+
+		}
+
 
 		//DataDrawing end
 
 
 		//点击类型列表按钮，进行加载元素
 		$showSongClass.find('li').tap(function(){
-			songListDrawing($(this).index());
+			var Arr = [];
+			for( var i in Data ){
+				if( Data[i].classS == songClass[$(this).index()] ){
+					Arr.push(Data[i].SongNumber);
+				}
+			}
+			songListDrawing(Arr);
 		});
+
+		//全部音乐，列表渲染
+		$allSong.tap(function(){
+			songListDrawing(AllsongArr);
+		});
+
+		//操控列表红心音乐
+		$showSongCon.delegate('i','tap',function(){
+			var thisSongNum = parseInt($(this).parent().siblings('div').attr('thisnumber'));
+
+			if ( $(this).index() == 0 ) {
+				redHeartArr.push( thisSongNum );
+			}else{
+				// redHeartArr.remove( thisSongNum );
+
+				redHeartArr = romoveArrElement(redHeartArr,thisSongNum);
+			}
+			$(this).hide().siblings().show();
+
+			console.log(redHeartArr);
+		});
+
+		//红心音乐渲染
+		$Ilike.tap(function(){
+			songListDrawing(redHeartArr);
+		});
+
 
 		//点击列表播放音乐
 		$showSongCon.delegate('p','tap',function(){
 			// 获取这首歌的thisNumber,并且播放
 			var index =  parseInt($(this).parent().attr('thisnumber')),
 			//获取当前列表对象
-			      obj = $showSongCon.find('.songListInformation');
+			    obj   = $showSongCon.find('.songListInformation');
 
 			//改变全局变量
 			//当前列表的这首歌的index值
@@ -171,10 +218,45 @@
 			playMusic( parseInt(nowSongClassLlit[nowSongIndex]) );
 		});
 
+		//暂停，播放
+		$playStop.tap(function(){
+			if( Audio.paused ){
+				Audio.play();
+			}else{
+				Audio.pause();
+			}
+		});
+
+		//监听事件，监听歌曲是否播放，改变样式
+		Audio.addEventListener('play',function(){
+			$playStop.eq(0).hide();
+			$playStop.eq(1).show();
+			$playStop.eq(2).hide();
+			$playStop.eq(3).show();
+			Runing();
+		},false);
+
+		Audio.addEventListener('pause',function(){
+			$playStop.eq(0).show();
+			$playStop.eq(1).hide();
+			$playStop.eq(2).show();
+			$playStop.eq(3).hide();
+
+			clearInterval(AllRunFun);
+		},false);
+
 
 		//音乐播放函数
 		function playMusic(index){
 			var thisIndex = index;
+
+			//更新音乐时间数组
+			songTimeArr   = LayoutLyric( Data[thisIndex].Lyric )[0];
+			//更新音乐歌词数组
+			songLyricsArr = LayoutLyric( Data[thisIndex].Lyric )[1];
+
+			//渲染歌词
+			LyricsDrawing();
 
 
 			//加载歌曲信息
@@ -189,10 +271,163 @@
 			//播放
 			Audio.play();
 
-
-
+			//不断执行的方法
+			Runing();
 
 		}//playMusic() end
+
+		//获取歌曲时间长度
+		Audio.addEventListener('canplay',function(){
+			if( !isNaN(Audio.duration) ){
+				AllTime = Audio.duration;
+				$showAllTime.text( layoutTime(AllTime) );
+			}
+		},false);
+
+
+		function Runing(){
+
+			AllRunFun = setInterval(function(){
+				nowTime = audio.currentTime;
+				// 写入当前时间
+				$showNowTime.text( layoutTime(nowTime) );
+				//时间轴
+				$timeLine.css({
+					'width':nowTime/AllTime*100+'%'
+				});
+
+				//同步歌词
+				for( var i in songTimeArr ){
+
+					if( parseInt(songTimeArr[i]/1000) == parseInt(nowTime) ){
+						$lyricsCon.find('li').eq(i).addClass('active').siblings().removeClass('active');
+						$lyricsCon.css({
+							'transform': 'translate3D(0,' +( LyricsVideoH / 2 - i * lyricsLiHeight )+ 'px,  0)',
+							'-webkit-transform': 'translate3D( 0,' +( LyricsVideoH / 2 - i * lyricsLiHeight )+ 'px, 0)'
+						});
+					}
+
+				}
+
+			},50); 
+		}
+
+
+		//时间轨迹的点击事件
+		$timeLine.tap(function(){
+			// var touches = e.touches[0];
+			// 	endX    = touches.pageX;
+
+			console.log(1234);
+		});
+
+
+		//如果播放完毕，那么执行播放模式
+		Audio.addEventListener('ended',function(){
+			Audio.pause();
+			plauMode();
+		},false);
+
+
+
+		//点击切换播放模式
+		function tapChagePlayMode(){
+			var obj = $playMode.find('i');
+			
+			obj.tap(function(){
+				var playModeNum = $(this).index();
+				playModeNum++;
+				if( playModeNum > obj.length -1 ){
+					playModeNum = 0;
+				}
+				obj.eq(playModeNum).show().siblings().hide();
+			});
+		}
+		tapChagePlayMode();
+
+		//播放模式
+		function plauMode(){
+			//列表播放
+			if( playModeNum == 0 ){
+				nowSongIndex++;
+				if( nowSongIndex > nowSongClassLlit.length - 1 ){
+					Audio.pause();
+				}else{
+					playMusic(nowSongClassLlit[nowSongIndex]);
+				}
+				
+			}
+			// 循环播放
+			if( playModeNum == 1){
+				nowSongIndex++;
+				if( nowSongIndex > nowSongClassLlit.length - 1 ){
+					nowSongIndex = 0;
+				}
+				playMusic(nowSongClassLlit[nowSongIndex]);
+			}
+			//单曲播放
+			if ( playModeNum == 2 ) {
+				playMusic(nowSongClassLlit[nowSongIndex]);
+			}
+			//随机播放
+			if( playModeNum == 3 ){
+				nowSongIndex = Math.random()*nowSongClassLlit.length;
+				playMusic(nowSongClassLlit[nowSongIndex]);
+			}
+		}
+
+
+
+
+		//这个方法处理歌词，把源字符串修改成两个数组。一个是时间数组，一个是歌词数组，返回一个数组，
+	    function LayoutLyric(string){
+	        var St        = string,//接收原始字符串
+	            textArr   = St.split('['),//执行第一次分割
+	            timeArr   = [],//时间数组
+	            lyricArr  = [],//歌词数组
+	            returnArr = [];//将要返回的数组
+
+	        //时间初步提取，歌词提取
+	        for( var i in textArr){
+	            var arr = textArr[i].split(']');//第二次分割
+	            timeArr.push(arr[0]);
+	            lyricArr.push(arr[1]);
+	        }
+	        //把时间处理成以毫秒为单位的时间
+	        for(var i in timeArr){
+	            var time        = timeArr[i].split(':');//目的获取分钟
+	                minute      = parseInt(time[0])*60*1000;//分钟转化成毫秒
+	                second      = parseInt(time[1])*1000,//秒转化成毫秒
+	                millisecond = parseInt(parseFloat(time[1])%1*100),//获取毫秒
+	                timeArr[i]  = minute + second + millisecond; //直接改变原数组的值
+	        }
+	        //因为timeArr，lyricArr的第一项为NaN，为了方便起见，删除第一项
+	        timeArr.shift();
+	        lyricArr.shift();
+
+	        //把两个数组放到将要返回的总数组里面
+	        returnArr = [timeArr,lyricArr]
+	        //console.log(returnArr);
+	        return returnArr;
+	    }
+
+		//时间的处理方法，传进来秒，返回00:00
+		function layoutTime(T){
+			var time   = T,
+				minute = parseInt(time/60),
+				second = parseInt((time%60).toFixed(2));
+
+			if( minute < 10 ){
+				minute = '0' + minute;
+			}
+			if( second < 10 ){
+				second = '0' + second;
+			}
+
+			return minute + ':' + second;
+
+
+		}
 
 
 
@@ -271,6 +506,24 @@
 
 	}
 	showPage();
+
+
+
+	//构造函数，删除数组内的指定元素，接收一个数组，一个要删除值
+	function romoveArrElement(Arr,removeObj){
+		var ArrObj    = Arr,
+			removeVal = removeObj,
+			thisIndex = 0;
+
+		for( var i = 0; i < ArrObj.length; i++ ){
+			if( ArrObj[i] == removeVal ){
+				thisIndex = i;
+			}
+		}
+
+		ArrObj.splice(thisIndex,1);
+		return ArrObj;
+	}
 
 
 
