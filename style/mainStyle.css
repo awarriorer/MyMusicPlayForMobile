@@ -283,7 +283,6 @@ body {
 }
 .songList .Find {
   color: red;
-  display: none;
 }
 .songList li:last-child {
   border-bottom: none;
@@ -336,7 +335,7 @@ body {
   display: block;
 }
 .nowHeart .red {
-  color: #red;
+  color: red;
 }
 .pageB_play {
   width: 100%;

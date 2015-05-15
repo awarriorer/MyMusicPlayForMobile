@@ -46,7 +46,7 @@
 			$songName        = $('#pageA_songName,#pageB_songName'),//歌名
 			$singerName      = $("#pageA_singerName"),//歌手名称
 			$singerImg       = $('#pageA_SingerImg').find('img'),//歌手图片
-			$nowHeart        = $('#nowHeart'),//显示当前是否为红心
+			$nowHeart        = $('#nowHeart').find('i'),//显示当前是否为红心
 			$allSong         = $('#allSong'),//按钮,全部音乐
 			$Ilike           = $('#ILike'),
 
@@ -60,12 +60,13 @@
 			songClass        = [],//歌曲分类
 			nowSongClassLlit = [],//当前播放列表
 			nowSongIndex     = 0,//当前类表正在播放的index值
+			allArrIndexPlay  = 0,//当前播放的这首歌，在整个数组中的位置
 			songTimeArr      = [],//当前歌曲时间数组
 			songLyricsArr    = [],//当前歌曲歌词数组
 			playModeNum      = 0,//播放模式
 
 			AllsongArr       = [],//所有歌曲的角标，为点击'全部'所用
-			redHeartArr      = [],//红心音乐
+			redHeartArr      = [],//红心数据
 
 			//后台操作中用到的变量
 			nowTime          = 0,//当前歌曲的当前时间
@@ -78,6 +79,20 @@
 
 			aa               = '';
 
+		//初始化红心数据getUnlineDate
+		function infoRedHeartArr(){
+			if ( !isNaN(getUnlineDate()[0])) {
+				redHeartArr = getUnlineDate();
+				for( var i in redHeartArr){
+					Data[redHeartArr[i]].ILIKE = true;
+				}
+			}else{
+				redHeartArr = [];
+			}
+			
+
+		}
+		infoRedHeartArr();
 
 		//DataDrawing
 
@@ -92,7 +107,7 @@
 				songClass[i]       = Data[i].classS;
 			}
 			// 数组去除相同的元素
-			songClass = songClass.reverse().join(",").match(/([^,]+)(?!.*\1)/ig).reverse();
+			songClass = romoveSameVal(songClass);
 			// 页面渲染
 			for( var i in songClass ){
 				var nowLi = '<li><span>'+ songClass[i] +'</span></li>';
@@ -104,15 +119,23 @@
 
 		//歌曲列表的渲染,接收的是一个数组，数组中储存了歌曲的角标
 		function songListDrawing(Arr){
-			var nowArr      = Arr;
+			var nowArr      = Arr,
+				nowHeart    = '';
 			//清空原数据
 			$showSongCon.html('');
 
 			for( var i = 0; i < nowArr.length; i++ ){
-				var li = '<li><span class="songNumber">'+ doNunmber(i) +'</span>'+
+				//如果是红心
+				if( Data[nowArr[i]].ILIKE ){
+					nowHeart = '<i class="iconfont noFind hide">&#xe60b;</i><i class="iconfont Find">&#xe609;</i>';
+				}else{
+					nowHeart = '<i class="iconfont noFind">&#xe60b;</i><i class="iconfont Find hide">&#xe609;</i>';
+				}
+
+				var li = '<li><span class="songNumber">'+ doNunmber(i+1) +'</span>'+
 				         '<div class="songListInformation" thisNumber='+ Data[nowArr[i]].SongNumber +'>'+
 				         '<p>'+ Data[nowArr[i]].Name +'</p><p>'+ Data[nowArr[i]].Singer +'</p></div><div class="thisHeart">'+
-						 '<i class="iconfont noFind">&#xe60b;</i><i class="iconfont Find">&#xe609;</i></div></li>';
+						 nowHeart+'</div></li>';
 				$showSongCon.append(li);
 			}
 
@@ -156,28 +179,6 @@
 		$allSong.tap(function(){
 			songListDrawing(AllsongArr);
 		});
-
-		//操控列表红心音乐
-		$showSongCon.delegate('i','tap',function(){
-			var thisSongNum = parseInt($(this).parent().siblings('div').attr('thisnumber'));
-
-			if ( $(this).index() == 0 ) {
-				redHeartArr.push( thisSongNum );
-			}else{
-				// redHeartArr.remove( thisSongNum );
-
-				redHeartArr = romoveArrElement(redHeartArr,thisSongNum);
-			}
-			$(this).hide().siblings().show();
-
-			console.log(redHeartArr);
-		});
-
-		//红心音乐渲染
-		$Ilike.tap(function(){
-			songListDrawing(redHeartArr);
-		});
-
 
 		//点击列表播放音乐
 		$showSongCon.delegate('p','tap',function(){
@@ -227,6 +228,60 @@
 			}
 		});
 
+		//操控列表红心音乐,
+		//列表红心操作
+		$showSongCon.delegate('i','tap',function(){
+			var thisSongNum = parseInt($(this).parent().siblings('div').attr('thisnumber'));
+
+			if ( $(this).index() == 0 ) {
+				//红心，给这个对象新写入一个属性(ILIKE:true)
+				Data[thisSongNum].ILIKE = true;
+				redHeartArr.push( thisSongNum );
+				
+			}else{
+				// 去除红心;
+				Data[thisSongNum].ILIKE = false;
+				redHeartArr = romoveArrElement(redHeartArr,thisSongNum);
+			}
+
+			// 数组去除相同的元素
+			redHeartArr = romoveSameVal(redHeartArr);
+			//离线存储数据
+			saveUnlineData(redHeartArr);
+			$(this).hide().siblings().show();
+
+		});
+		//pageB,红心操作
+		$nowHeart.tap(function(){
+			var thisSongNum = allArrIndexPlay;
+			
+			if($(this).index() == 0 ){
+				//红心，给这个对象新写入一个属性(ILIKE:true)
+				Data[thisSongNum].ILIKE = true;
+				redHeartArr.push( thisSongNum );
+			}else{
+				// 去除红心;
+				Data[thisSongNum].ILIKE = false;
+				redHeartArr = romoveArrElement(redHeartArr,thisSongNum);
+			}
+			console.log(redHeartArr);
+			
+			// 数组去除相同的元素
+			redHeartArr = romoveSameVal(redHeartArr);
+
+			//离线存储数据
+			saveUnlineData(redHeartArr);
+
+			$(this).hide().siblings().show();
+		});
+		//pageB红心end
+
+
+		//红心音乐渲染
+		$Ilike.tap(function(){
+			songListDrawing(redHeartArr);
+		});
+
 		//监听事件，监听歌曲是否播放，改变样式
 		Audio.addEventListener('play',function(){
 			$playStop.eq(0).hide();
@@ -248,24 +303,31 @@
 
 		//音乐播放函数
 		function playMusic(index){
-			var thisIndex = index;
+			allArrIndexPlay = index;
 
 			//更新音乐时间数组
-			songTimeArr   = LayoutLyric( Data[thisIndex].Lyric )[0];
+			songTimeArr   = LayoutLyric( Data[allArrIndexPlay].Lyric )[0];
 			//更新音乐歌词数组
-			songLyricsArr = LayoutLyric( Data[thisIndex].Lyric )[1];
+			songLyricsArr = LayoutLyric( Data[allArrIndexPlay].Lyric )[1];
 
 			//渲染歌词
 			LyricsDrawing();
 
+			//判断是不是红心音乐
+			if( Data[allArrIndexPlay].ILIKE ){
+				$nowHeart.eq(1).show().siblings().hide();
+			}else{
+				$nowHeart.eq(0).show().siblings().hide();
+			}
+
 
 			//加载歌曲信息
-			$songName.text(Data[thisIndex].Name);
-			$singerName.text(Data[thisIndex].Singer);
-			$singerImg.attr({'src':Data[thisIndex].Img});
+			$songName.text(Data[allArrIndexPlay].Name);
+			$singerName.text(Data[allArrIndexPlay].Singer);
+			$singerImg.attr({'src':Data[allArrIndexPlay].Img});
 
 			//更新地址
-			$(Audio).attr({'src':Data[thisIndex].Src});
+			$(Audio).attr({'src':Data[allArrIndexPlay].Src});
 			//重新加载
 			Audio.load();
 			//播放
@@ -278,6 +340,7 @@
 
 		//获取歌曲时间长度
 		Audio.addEventListener('canplay',function(){
+			//如果是数字，那么进行赋值，
 			if( !isNaN(Audio.duration) ){
 				AllTime = Audio.duration;
 				$showAllTime.text( layoutTime(AllTime) );
@@ -288,6 +351,10 @@
 		function Runing(){
 
 			AllRunFun = setInterval(function(){
+				//因为可能canplay的时候，总时间长度，重新定义全局变量，总时长
+				AllTime = Audio.duration;
+				$showAllTime.text( layoutTime(AllTime) );
+				//获取当前时间
 				nowTime = audio.currentTime;
 				// 写入当前时间
 				$showNowTime.text( layoutTime(nowTime) );
@@ -307,7 +374,7 @@
 						});
 					}
 
-				}
+				}//同步歌词 end
 
 			},50); 
 		}
@@ -318,7 +385,7 @@
 			// var touches = e.touches[0];
 			// 	endX    = touches.pageX;
 
-			console.log(1234);
+			// console.log(1234);
 		});
 
 
@@ -335,13 +402,14 @@
 			var obj = $playMode.find('i');
 			
 			obj.tap(function(){
-				var playModeNum = $(this).index();
 				playModeNum++;
 				if( playModeNum > obj.length -1 ){
 					playModeNum = 0;
 				}
 				obj.eq(playModeNum).show().siblings().hide();
+				
 			});
+
 		}
 		tapChagePlayMode();
 
@@ -371,7 +439,8 @@
 			}
 			//随机播放
 			if( playModeNum == 3 ){
-				nowSongIndex = Math.random()*nowSongClassLlit.length;
+
+				nowSongIndex = parseInt(Math.random()*nowSongClassLlit.length); 
 				playMusic(nowSongClassLlit[nowSongIndex]);
 			}
 		}
@@ -524,6 +593,37 @@
 		ArrObj.splice(thisIndex,1);
 		return ArrObj;
 	}
+
+	//储存离线数据
+	function saveUnlineData(dataVal){
+		localStorage.redArr = dataVal;
+	}
+
+	//获取离线数据
+	function getUnlineDate(){
+		var arr = [];
+		if ( localStorage.redArr ){
+			arr = localStorage.redArr.split(',');
+			for(var i in arr ){
+				arr[i] = parseInt(arr[i]);
+			}
+		}
+		
+		return arr;
+	}
+
+	// 数组去除相同的元素
+	function romoveSameVal(arr){
+		var nowA = [];
+		if( arr.length > 2){
+			nowA = arr.reverse().join(",").match(/([^,]+)(?!.*\1)/ig).reverse();
+			return nowA;
+		}else{
+			return arr;
+		}
+		
+	}
+
 
 
 
