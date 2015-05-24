@@ -22,6 +22,7 @@ html,body{
 	overflow: hidden;
 	color: rgba(255,255,255,0.5);
 	font-family: "微软雅黑";
+	-webkit-font-smoothing: antialiased;
 }
 body{
 	position: relative;
@@ -120,10 +121,23 @@ body{
 .pageA_title{
 	width: 100%;
 	height: 100%;
+	padding: 0 4rem;
 	text-align: center;
 	line-height: 4rem;
 }
+.moreThat{
+	width: 4rem;
+	height: 4rem;
+	position: absolute;
+	right: 0;
+	top: 0;
+	text-align: center;
+	line-height: 4rem;
 
+	i{
+		font-size: 1.8rem;
+	}
+}
 
 .pageTimeLine{
 	width: 100%;
@@ -188,7 +202,7 @@ body{
 //歌曲分类
 .misicClassList{
 	width: 100%;
-	padding: 0 5px;
+	padding: 5px;
 	list-style: none;
 
 	li{
@@ -236,13 +250,20 @@ body{
 
 .pageB_songName{
 	width: 100%;
-	height: 100%;
 	padding: 0 4rem;
-	font-size: 0.9rem;
+	font-size: 1rem;
 	text-align: center;
-	line-height: 4rem;
+	margin-top: 0.8rem;
 	color: rgba(255,255,255,0.5);
 }
+.pageB_singerName{
+	width: 100%;
+	padding: 0 4rem;
+	font-size: 0.7rem;
+	text-align: center;
+	color: rgba(255,255,255,0.5);
+}
+
 .pageB_songName:after{
 	.clear;
 }
@@ -452,5 +473,230 @@ body{
 	.active{
 		font-size: 0.8rem;
 		color: rgba(255,255,255,0.8);
+	}
+}
+
+
+//pageB,歌手图片
+.pageB_SingerImg{
+	width: 15rem;
+	height: 15rem;
+	padding: 1rem;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	overflow: hidden;
+	margin-top: -7.5rem;
+	margin-left: -7.5rem;
+	border-radius: 50%;
+	// background-color: rgba(255,255,255,0.2);
+	box-shadow: 0 0 1rem #000;
+	-webkit-box-shadow: 0 0 2rem #000;
+
+	// animation: Runing 30s linear infinite;
+	// -webkit-animation: Runing 30s linear infinite;
+
+	img{
+		width: 100%;
+		height:100%;
+		border-radius: 50%;
+		opacity: 0.8;
+	}
+}
+@keyframes Runing{
+	0%  {
+		transform:rotate(0deg);
+		-webkit-transform:rotate(0deg);
+	}
+	100%{
+		transform:rotate(360deg);
+		-webkit-transform:rotate(360deg);
+	}
+}
+@-webkit-keyframes Runing{
+	0%  {
+		transform:rotate(0deg);
+		-webkit-transform:rotate(0deg);
+	}
+	100%{
+		transform:rotate(360deg);
+		-webkit-transform:rotate(360deg);
+	}
+}
+
+
+
+
+// 声明容器
+.Warming{
+	transform:translate3D(110%,0,0);
+	-webkit-transform:translate3D(110%,0,0);
+
+	transition:all 1s;
+	-webkit-transition:all 1s;
+}
+
+.warming_con{
+	width: 100%;
+	height: 100%;
+	padding: 1rem;
+	overflow-y:auto;
+	font-size: 0.8rem;
+	text-align:Justify;
+	text-justify:inter-ideograph;
+
+	h3{
+		padding-top: 0.5rem;
+		font-weight: normal;
+
+	}
+
+	ul{
+		padding-left: 1rem;
+		list-style: none;
+
+		li{
+			margin-top: 0.3rem;
+			text-indent: 1rem;
+		}
+		li:first-child{
+			margin-top: 0;
+		}
+	} 
+}
+
+.returnMain{
+	width: 4rem;
+	height: 4rem;
+	position: absolute;
+	left: 0;
+	top: 0;
+	text-align: center;
+	line-height: 4rem;
+
+	i{
+		font-size: 1.5rem;
+	}
+}
+
+
+
+//loding style
+
+.lodingCon{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	background-image: url(../images/pageBg/load.jpg);
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	z-index: 10;
+
+	transition: all 2s;
+	-webkit-transition: all 2s;
+}
+
+.affrimLoad{
+	width: 6rem;
+	height: 6rem;
+	position: absolute;
+	right: 4rem;
+	top: 10rem;
+	text-align: center;
+	color: rgba(255,255,255,0.7);
+	font-size: 1rem;
+	background-color: rgba(0,0,0,0);
+	border-radius: 50%;
+	box-shadow: 0 0 0.5rem rgba(0,0,0,0.7);
+	display: none;
+
+	div{
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		left: 0;
+		top: 0;
+		background-color: rgba(0,0,0,0.2);
+		border-radius: 50%;
+		box-shadow: 0 0 0.5rem rgba(0,0,0,0.7);
+	}
+	div:nth-child(1){
+		animation: makeBig 4s linear infinite; 
+		-webkit-animation: makeBig 4s linear infinite; 
+	}
+	div:nth-child(2){
+		animation: makeBigB 4s linear infinite; 
+		-webkit-animation: makeBigB 4s linear infinite; 
+	}
+	span{
+		width: 100%;
+		height: 100%;
+		display: block;
+		position: absolute;
+		left: 0;
+		top: 0;
+		padding-top: 1.5rem;
+	}
+}
+
+@keyframes makeBig{
+	0%  {
+		transform:scale(1);
+		-webkit-transform:scale(1);
+	}
+	50%{
+		transform:scale(1.5);
+		-webkit-transform:scale(1.5);
+	}
+	100%{
+		transform:scale(1.5);
+		-webkit-transform:scale(1.5);
+	}
+}
+
+@-webkit-keyframes makeBig{
+	0%  {
+		transform:scale(1);
+		-webkit-transform:scale(1);
+	}
+	50%{
+		transform:scale(1.5);
+		-webkit-transform:scale(1.5);
+	}
+	100%{
+		transform:scale(1.5);
+		-webkit-transform:scale(1.5);
+	}
+}
+
+@keyframes makeBigB{
+	0%  {
+		transform:scale(1);
+		-webkit-transform:scale(1);
+	}
+	50%{
+		transform:scale(1.5);
+		-webkit-transform:scale(1.5);
+	}
+	100%{
+		transform:scale(2);
+		-webkit-transform:scale(2);
+	}
+}
+
+@-webkit-keyframes makeBigB{
+	0%  {
+		transform:scale(1);
+		-webkit-transform:scale(1);
+	}
+	50%{
+		transform:scale(1.5);
+		-webkit-transform:scale(1.5);
+	}
+	100%{
+		transform:scale(2);
+		-webkit-transform:scale(2);
 	}
 }

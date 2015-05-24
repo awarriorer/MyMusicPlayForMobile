@@ -1,14 +1,14 @@
 
 /*
 	声明：本项目仅仅用于学习和技术交流，如有商业目的的引用，请通知本项目作者
-	作者：jack大叔
+	作者：笨·大叔
 	项目起始时间：2015年5月9日10:40:36
-	最后更新时间：2015年5月14日10:09:36
+	最后更新时间：2015年5月24日18:03:27
 
 	
 	本文件主要为本项目提供主要的逻辑代码支持，及主程序
 	项目技术支持：
-			1：本项目基于zepto.js，主要应用了其选择器，以及其touch.js插件
+			1：本项目基于zepto.js以及其touch.js插件
 		    2：屏幕的切换，依托swiper.js
             3：数据的加载，(data.js的数据模拟)
             4：主逻辑，
@@ -16,11 +16,28 @@
           		4.2 音乐:播放、基础操控、当前播放列表数组对象的操控 
           		4.3 歌词：数据预处理、格式化、以及渲染 
           		4.4 红心音乐:数组的操作
-          		4.5 离线存储	
+          		4.5 离线存储
+          		4.6 页面初始化动画	
 */
 
 
 (function($){
+
+	//loding
+	window.onload = function(){
+		$('#affrimLoad').show();
+	}
+
+	$('#affrimLoad').tap(function(){
+		var obj = $(this).parent();
+
+		obj.css({'opacity':0});
+		setTimeout(function(){
+			obj.hide();
+		},2000);
+
+	});
+
 
 	// 随机背景
 	function randomBackground(){
@@ -39,16 +56,17 @@
 			$playStop        = $('#pageA_palyStop,#pageB_playStop').find('i'),//播放，暂停
 			$preSong         = $("#pageB_preSong"),//上一首
 			$nextSong        = $("#PageA_NextSong,#pageB_nextSong"),//下一首
-			$timeLine        = $('#pageA_timeLine,#pageB_line').find('div'),//时间轴
+			$timeLine        = $('#pageA_timeLine,#pageB_line'),//时间轴
 			$playMode        = $('#playMode'),//播放模式
 			$showNowTime     = $('#nowTime'), //页面当前时间  
 			$showAllTime     = $('#allTime'), //页面当前时间  
 			$songName        = $('#pageA_songName,#pageB_songName'),//歌名
-			$singerName      = $("#pageA_singerName"),//歌手名称
-			$singerImg       = $('#pageA_SingerImg').find('img'),//歌手图片
+			$singerName      = $("#pageA_singerName,#pageB_singerName"),//歌手名称
+			$singerImg       = $('#pageA_SingerImg,#pageB_SingerImg').find('img'),//歌手图片
+			$pageBSingerImg  = $('#pageB_SingerImg'),
 			$nowHeart        = $('#nowHeart').find('i'),//显示当前是否为红心
 			$allSong         = $('#allSong'),//按钮,全部音乐
-			$Ilike           = $('#ILike'),
+			$Ilike           = $('#ILike'),//底部，红心按钮
 
 			//页面渲染用到的变量
 			$showSongClass   = $('#misicClassList'),//歌曲分类列表容器
@@ -149,7 +167,7 @@
 			}	
 		}
 		//默认显示第一个
-		songListDrawing(0);
+		songListDrawing(AllsongArr);
 
 		function LyricsDrawing(){
 			$lyricsCon.html('');
@@ -236,7 +254,7 @@
 			if ( $(this).index() == 0 ) {
 				//红心，给这个对象新写入一个属性(ILIKE:true)
 				Data[thisSongNum].ILIKE = true;
-				redHeartArr.push( thisSongNum );
+				redHeartArr.unshift( thisSongNum );
 				
 			}else{
 				// 去除红心;
@@ -245,7 +263,7 @@
 			}
 
 			// 数组去除相同的元素
-			redHeartArr = romoveSameVal(redHeartArr);
+			// redHeartArr = romoveSameVal(redHeartArr);
 			//离线存储数据
 			saveUnlineData(redHeartArr);
 			$(this).hide().siblings().show();
@@ -258,16 +276,15 @@
 			if($(this).index() == 0 ){
 				//红心，给这个对象新写入一个属性(ILIKE:true)
 				Data[thisSongNum].ILIKE = true;
-				redHeartArr.push( thisSongNum );
+				redHeartArr.unshift( thisSongNum );
 			}else{
 				// 去除红心;
 				Data[thisSongNum].ILIKE = false;
 				redHeartArr = romoveArrElement(redHeartArr,thisSongNum);
 			}
-			console.log(redHeartArr);
 			
 			// 数组去除相同的元素
-			redHeartArr = romoveSameVal(redHeartArr);
+			// redHeartArr = romoveSameVal(redHeartArr);
 
 			//离线存储数据
 			saveUnlineData(redHeartArr);
@@ -289,6 +306,11 @@
 			$playStop.eq(2).hide();
 			$playStop.eq(3).show();
 			Runing();
+			//page动画样式
+			$pageBSingerImg.css({
+				'animation': 'Runing 60s linear 2s infinite',
+				'-webkit-animation': 'Runing 60s linear 2s infinite'
+			});
 		},false);
 
 		Audio.addEventListener('pause',function(){
@@ -296,8 +318,12 @@
 			$playStop.eq(1).hide();
 			$playStop.eq(2).show();
 			$playStop.eq(3).hide();
-
 			clearInterval(AllRunFun);
+			//清除动画
+			$pageBSingerImg.css({
+				'animation': 'Runin 0s linear infinite',
+				'-webkit-animation': 'Runin 0s linear infinite'
+			});
 		},false);
 
 
@@ -326,6 +352,8 @@
 			$singerName.text(Data[allArrIndexPlay].Singer);
 			$singerImg.attr({'src':Data[allArrIndexPlay].Img});
 
+			//暂停音乐
+			Audio.pause();
 			//更新地址
 			$(Audio).attr({'src':Data[allArrIndexPlay].Src});
 			//重新加载
@@ -351,7 +379,7 @@
 		function Runing(){
 
 			AllRunFun = setInterval(function(){
-				//因为可能canplay的时候，总时间长度，重新定义全局变量，总时长
+				//因为可能canplay的时候，总时间长度，重新定义全局变量，总时长.太暴力了。。
 				AllTime = Audio.duration;
 				$showAllTime.text( layoutTime(AllTime) );
 				//获取当前时间
@@ -359,7 +387,7 @@
 				// 写入当前时间
 				$showNowTime.text( layoutTime(nowTime) );
 				//时间轴
-				$timeLine.css({
+				$timeLine.find('div').css({
 					'width':nowTime/AllTime*100+'%'
 				});
 
@@ -380,13 +408,45 @@
 		}
 
 
-		//时间轨迹的点击事件
-		$timeLine.tap(function(){
-			// var touches = e.touches[0];
-			// 	endX    = touches.pageX;
+		//时间轨迹的点击,拖动
+		function AudioDoTime(){
+			var line     = document.getElementById('pageB_line'),
+				endX     = 0,
+				AllWidth = $timeLine.width();
 
-			// console.log(1234);
-		});
+			function startTouch(e){
+				var touches = e.touches[0];
+					endX    = touches.pageX;
+
+				line.addEventListener('touchmove',MoveTouch,false);	
+				line.addEventListener('touchend',endTouch,false);	
+			}
+
+			function MoveTouch(e){
+				e.preventDefault();
+				e.stopPropagation();
+
+				var touches = e.touches[0];
+					endX    = touches.pageX;
+
+			}
+			function endTouch(){
+				Audio.currentTime = parseInt(endX/AllWidth*AllTime);
+
+				line.removeEventListener('touchmove',MoveTouch,false);	
+				line.removeEventListener('touchend',endTouch,false);
+			}
+
+			line.addEventListener('touchstart',startTouch,false);
+
+		}
+		AudioDoTime();
+
+
+
+
+
+
 
 
 		//如果播放完毕，那么执行播放模式
@@ -449,36 +509,33 @@
 
 
 		//这个方法处理歌词，把源字符串修改成两个数组。一个是时间数组，一个是歌词数组，返回一个数组，
-	    function LayoutLyric(string){
-	        var St        = string,//接收原始字符串
-	            textArr   = St.split('['),//执行第一次分割
-	            timeArr   = [],//时间数组
-	            lyricArr  = [],//歌词数组
-	            returnArr = [];//将要返回的数组
+	    function LayoutLyric(str){
+			var obj       = str,
+				ReTime    = /\[([^\]]+)\]/g,
+				ReLyric   = /\][^\[]+/g,
+				tiemArr   = [],
+				lyricArr  = [];
+			//时间数组
+			tiemArr  = obj.match(ReTime).map(function(list){
+				return list.replace(/[\[\]]/g,'');
+			});
+			lyricArr = obj.match(ReLyric).map(function(list){
+				return list.replace(/[\[\]]/g,'');
+			});
 
-	        //时间初步提取，歌词提取
-	        for( var i in textArr){
-	            var arr = textArr[i].split(']');//第二次分割
-	            timeArr.push(arr[0]);
-	            lyricArr.push(arr[1]);
-	        }
-	        //把时间处理成以毫秒为单位的时间
-	        for(var i in timeArr){
-	            var time        = timeArr[i].split(':');//目的获取分钟
-	                minute      = parseInt(time[0])*60*1000;//分钟转化成毫秒
-	                second      = parseInt(time[1])*1000,//秒转化成毫秒
-	                millisecond = parseInt(parseFloat(time[1])%1*100),//获取毫秒
-	                timeArr[i]  = minute + second + millisecond; //直接改变原数组的值
-	        }
-	        //因为timeArr，lyricArr的第一项为NaN，为了方便起见，删除第一项
-	        timeArr.shift();
-	        lyricArr.shift();
-
-	        //把两个数组放到将要返回的总数组里面
-	        returnArr = [timeArr,lyricArr]
-	        //console.log(returnArr);
-	        return returnArr;
-	    }
+			//处理时间数组
+			function MakeTime(){
+				tiemArr.map(function(list,index){
+					var arr         = list.split(':'),
+					    minute      = parseInt(arr[0])*60*1000,//分钟
+					    second      = parseInt(arr[1])*1000,
+					    millisecond = parseInt(parseFloat(arr[1])%1*100);
+					    tiemArr[index] = minute + second + millisecond;   
+				});
+			}
+			MakeTime();
+			return [tiemArr,lyricArr];
+		}//LayoutLyric end!
 
 		//时间的处理方法，传进来秒，返回00:00
 		function layoutTime(T){
@@ -538,7 +595,9 @@
 			BnowPage    = $('#pageB_nowPage').find('span'),//三个小按钮
 			windowW     = $(document).width(),
 			gotoPageB   = $('#nowSong_information,#pageA_SingerImg'),//点击歌手信息，到pageB,且不会跳转
-
+			moreThat    = $('#moreThat'),
+			morePage    = $('#morePage'),
+			returnMain  = $('#returnMain'),
 			//swiper,左右切换,记录原点
 			mySwiper    = new Swiper('.swiper-container',{
 				onSlideChangeEnd: function(swiper){
@@ -569,6 +628,21 @@
 				pageB.css({
 					'transform':'translate3D(0,100%,0)',
 					'-webkit-transform':'translate3d(0,100%,0)'
+				});
+			});
+
+			//更多按钮，项目简介
+			moreThat.tap(function(){
+				morePage.css({
+					'transform':'translate3D(0,0,0)',
+					'-webkit-transform':'translate3D(0,0,0)',
+				});
+			});
+
+			returnMain.tap(function(){
+				morePage.css({
+					'transform':'translate3D(110%,0,0)',
+					'-webkit-transform':'translate3D(110%,0,0)',
 				});
 			});
 

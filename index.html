@@ -10,8 +10,16 @@
 </head>
 <body>
 	<!-- loding page -->
-	<section class="main_page hide">
-		
+	<section class="main_page lodingCon">
+		<div class="affrimLoad" id="affrimLoad">
+			<div></div>
+			<div></div>
+			<span>
+				<p>旋律就绪</p>
+				<p>点击倾听</p>
+			</span>
+			
+		</div>
 	</section> 
 	<!-- loding page end-->
 
@@ -23,6 +31,9 @@
 			<p class="pageA_title">
 				带上你和音乐一起去旅行..
 			</p>
+			<div class="moreThat">
+				<i class="iconfont" id="moreThat">&#xe605;</i>
+			</div>
 		</header>
 		<!-- 中间列表容器 -->
 		<section class="con_container">
@@ -33,9 +44,6 @@
 				<li class="playNow">
 					<span>英文</span>
 				</li> -->
-
-				
-				
 			</ul>
 
 			<ul class="misicClassList" id="protect">
@@ -59,8 +67,8 @@
 			</div>
 			<!-- 歌名显示 -->
 			<div class="nowSong_information" id="nowSong_information">
-				<p id="pageA_singerName">许嵩</p>
-				<p id="pageA_songName">幻听</p>
+				<p id="pageA_singerName">SongName</p>
+				<p id="pageA_songName">singer</p>
 			</div>
 			<!-- 播放组件 -->
 
@@ -91,8 +99,9 @@
 
 			<span class="returnOnePage iconfont" id="returnPageA">&#xe608;</span>
 			<p class="pageB_songName" id="pageB_songName">
-				李白李白李白李李白李白李
+				songName
 			</p>
+			<p class="pageB_singerName" id="pageB_singerName">singerName</p>
 		</header>
 		<!-- 中间列表容器 -->
 		<section class="con_container">
@@ -120,7 +129,13 @@
 						</ul>
 				    </div>
 				    <!-- 第二页，歌曲播放大碟图片 -->
-				    <div class="swiper-slide">2222</div>
+				    <div class="swiper-slide">
+				    	
+				    	<div class="pageB_SingerImg" id="pageB_SingerImg">
+				    		<img src="images/singer/huiT.jpg">
+				    	</div>
+
+				    </div>
 				    <!-- 第三页，歌词显示页面 -->
 				    <div class="swiper-slide" id="Lyricer_video">
 				    	<ul class="lyrics_list" id="lyrics_list">
@@ -139,7 +154,7 @@
 			<!-- pageB，播放组件 -->
 			<div  class="paluMode" id="playMode">
 				<!-- 列表播放 -->
-				<i class="iconfont">&#xe603;</i>
+				<i class="iconfont">&#xe60a;</i>
 				<!-- 循环播放 -->
 				<i class="iconfont">&#xe600;</i>
 				<!-- 单曲播放 -->
@@ -190,6 +205,66 @@
 	<audio src="" id="audio">
 		
 	</audio>
+
+	<!-- 声明容器 -->
+	<section class="con_mainUP Warming" id="morePage">
+		<header class="conUp_header">
+			<p class="pageA_title">
+				项目声明
+			</p>
+			<div class="returnMain">
+				<i class="iconfont" id="returnMain">&#xe608;</i>
+			</div>
+		</header>
+
+		<section class="con_container">
+			<section class="warming_con">
+				<h3>目的：</h3>
+				<ul>
+					<li>兴趣爱好</li>
+					<li>学习交流</li>
+					<li>(革命尚未成功，大叔仍需努力)</li>
+				</ul>
+
+				<h3>主要功能：</h3>
+				<ul>
+					<li>a.音乐分类，以及基础操作(播放、暂停、上一首、下一首)</li>
+					<li>
+						b.记录喜欢的音乐，下次访问时，依旧在‘喜欢’列表里面
+					</li>
+					<li>
+						c.歌词的同步显示
+					</li>
+				</ul>
+
+
+				<h3>技术介绍</h3>
+				<ul>
+					<li>a.本项目基于zepto.js.(主要用了其选择器)</li>
+					<li>
+						b.屏幕滑动用的是swiper.js。(原本是自己写的，但是有兼容问题，希望路过的大神可以提供一些js原生的touch教程，感激不尽)
+					</li>
+					<li>
+						c.Html5中的音频(audio)，以及它对应的Api(w3cschool有详细API)。
+					</li>
+					<li>
+						d.图标是用了iconfont.(第一次用，果然很方便)。
+					</li>
+				</ul>
+
+				<h3>关于作者</h3>
+				<ul>
+					<li>笨·大叔</li>
+					<li>QQ：756500909</li>
+					<li>邮箱：awarriorer@163.com</li>
+					<li>GitHubName：awarriorer</li>
+				</ul>
+
+			</section>
+			
+		</section>
+	</section>
+	<!-- 声明容器 end-->
 
 	<script type="text/javascript" src="js/zepto.js"></script>
 	<script type="text/javascript" src="js/zeptoTouch.js"></script>
