@@ -313,7 +313,7 @@ function requestData() {
 			'classS': '节奏',
 			'Src': 'http://cc.stream.qqmusic.qq.com/C100001v3bmD3Nz8bn.m4a?fromtag=52',
 			'Img': 'images/singer/singerH9.jpg',
-			'Lyric': ''
+			'Lyric': '[00:01.32]Transcendence - Lindsey Stirling'
 		},
 		{
 			'Name': '追梦赤子心',
