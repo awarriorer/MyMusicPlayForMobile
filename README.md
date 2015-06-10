@@ -1,6 +1,6 @@
 # MyMusicPlayForMobile
 this is my musicPlay 20151110
-
+访问地址：<a hrf="http://xxyy.ahthw.com//xiaoyu/musicForMoibleV1.0/index.html">http://xxyy.ahthw.com//xiaoyu/musicForMoibleV1.0/index.html</a>
 这是一个用h5写写出的音乐播放器，
 将要实现的功能有：
     音乐分类播放，
